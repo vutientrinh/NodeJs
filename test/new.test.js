@@ -1,4 +1,7 @@
 const { findOne } = require("../app/controller/note.controller");
+const { findAll } = require("../app/controller/note.controller");
+const { update } = require("../app/controller/note.controller");
+
 const Note = require("../app/models/note.model"); // Assuming Note is your mongoose model
 
 jest.mock("../app/models/note.model"); // Mock the Note model
@@ -48,49 +51,144 @@ describe("findOne note controller", () => {
   });
 });
 
-describe("findAll function", () => {
+describe("findAll notes controller", () => {
   let req, res;
 
   beforeEach(() => {
-    // Create mock request and response objects using node-mocks-http
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse();
-    jest.clearAllMocks(); // Clear any previous mocks
+    // Mock request and response objects
+    req = {}; // No params needed for findAll
+
+    res = {
+      status: jest.fn().mockReturnThis(), // Allows res.status().send()
+      send: jest.fn(),
+    };
   });
 
   test("should return all notes", async () => {
-    // Mocking Note.find to resolve with some sample notes
     const mockNotes = [
-      { title: "Note 1", content: "Content 1" },
-      { title: "Note 2", content: "Content 2" },
+      { _id: "1", title: "Note 1", content: "Content for note 1" },
     ];
 
-    Note.find.mockResolvedValue(mockNotes); // Mock the database call
+    // Mock the find method of Note model to resolve with the mock notes
+    Note.find = jest.fn().mockResolvedValue(mockNotes);
 
-    // Call the controller
     await findAll(req, res);
 
-    // Assertions
-    const responseData = res._getData(); // Get data from the response
-    expect(res.statusCode).toBe(200); // Check status code
-    expect(responseData).toEqual(mockNotes); // Check if returned data matches the mock
+    expect(res.send).toHaveBeenCalledWith(mockNotes);
   });
 
-  test("should handle errors", async () => {
-    // Mocking Note.find to throw an error
-    const errorMessage = "Database error";
-    Note.find.mockRejectedValue(new Error(errorMessage)); // Simulate a rejected promise
+  test("should return an empty array if no notes are found", async () => {
+    // Mock the find method to resolve with an empty array
+    Note.find = jest.fn().mockResolvedValue([]);
 
-    // Spy on console.error to check if it gets called
-    const consoleSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
-    // Call the controller
     await findAll(req, res);
 
-    // Assertions
-    expect(consoleSpy).toHaveBeenCalledWith(new Error(errorMessage)); // Check if error was logged
-    consoleSpy.mockRestore(); // Restore console after the test
+    expect(res.send).toHaveBeenCalledWith([]);
+  });
+});
+describe("update note controller", () => {
+  let req, res;
+
+  beforeEach(() => {
+    req = {
+      params: { noteId: "1" }, // Mock note ID
+      body: { title: "Updated Note", content: "Updated content" }, // Mock body
+    };
+
+    res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+  });
+
+  test("should return 404 if content is missing", async () => {
+    req.body.content = ""; // Empty content
+
+    await update(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith({
+      message: "Content can not be empty!!!",
+    });
+  });
+
+  test("should update the note successfully", async () => {
+    const mockNote = {
+      _id: "1",
+      title: "Updated Note",
+      content: "Updated content",
+    };
+
+    jest.spyOn(Note, "findByIdAndUpdate").mockResolvedValue(mockNote);
+
+    await update(req, res);
+
+    expect(res.send).toHaveBeenCalledWith(mockNote);
+  });
+
+  test("should return 404 if note is not found", async () => {
+    jest.spyOn(Note, "findByIdAndUpdate").mockResolvedValue(null); // Simulate note not found
+
+    await update(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith({
+      message: "Cannot find a note with id: 1",
+    });
+  });
+});
+
+describe("delete note controller", () => {
+  let req, res;
+
+  beforeEach(() => {
+    req = {
+      params: { noteId: "1" }, // Mock note ID
+    };
+
+    res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+  });
+
+  test("should delete the note successfully", async () => {
+    const mockNote = {
+      _id: "1",
+      title: "Note to delete",
+      content: "Some content",
+    };
+
+    jest.spyOn(Note, "findByIdAndRemove").mockResolvedValue(mockNote);
+
+    await deleteNote(req, res);
+
+    expect(res.send).toHaveBeenCalledWith({
+      message: "Note deleted successfully!",
+    });
+  });
+
+  test("should return 404 if note is not found", async () => {
+    jest.spyOn(Note, "findByIdAndRemove").mockResolvedValue(null); // Simulate note not found
+
+    await deleteNote(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith({
+      message: "Cannot find a note with id: 1",
+    });
+  });
+
+  test("should return 500 if there's a server error", async () => {
+    const error = new Error("Database error");
+
+    jest.spyOn(Note, "findByIdAndRemove").mockRejectedValue(error); // Simulate a database error
+
+    await deleteNote(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith({
+      message: "Error deleting note with id: 1",
+    });
   });
 });

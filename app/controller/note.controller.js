@@ -22,8 +22,14 @@ exports.findAll = (req, res) => {
     .then((notes) => {
       res.send(notes);
     })
-    .catch(console.error());
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({
+        message: "Some error occurred while retrieving notes.",
+      });
+    });
 };
+
 exports.findOne = (req, res) => {
   Note.findById(req.params.noteId)
     .then((note) => {
@@ -42,7 +48,7 @@ exports.findOne = (req, res) => {
 
 exports.update = (req, res) => {
   if (!req.body.content) {
-    return res.status(404).send({ message: "Content can not empty !!!" });
+    return res.status(404).send({ message: "Content can not be empty!!!" });
   }
   Note.findByIdAndUpdate(
     req.params.noteId,
@@ -55,7 +61,7 @@ exports.update = (req, res) => {
     .then((note) => {
       if (!note) {
         return res.status(404).send({
-          message: "Can find this note have id : " + req.params.noteId,
+          message: "Cannot find a note with id: " + req.params.noteId,
         });
       }
       res.send(note);
@@ -66,11 +72,17 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   Note.findByIdAndRemove(req.params.noteId)
     .then((note) => {
-      if (!note)
+      if (!note) {
         return res.status(404).send({
-          message: "Can't find this note has id " + req.params.noteId,
+          message: "Cannot find a note with id: " + req.params.noteId,
         });
-      res.send(note);
+      }
+      res.send({ message: "Note deleted successfully!" });
     })
-    .catch(console.error());
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({
+        message: "Error deleting note with id: " + req.params.noteId,
+      });
+    });
 };
