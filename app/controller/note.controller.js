@@ -69,8 +69,8 @@ exports.update = (req, res) => {
     .catch(console.error());
 };
 
-exports.delete = (req, res) => {
-  Note.findByIdAndRemove(req.params.noteId)
+exports.deleteNote = (req, res) => {
+  Note.findByIdAndDelete(req.params.noteId)
     .then((note) => {
       if (!note) {
         return res.status(404).send({
@@ -80,7 +80,6 @@ exports.delete = (req, res) => {
       res.send({ message: "Note deleted successfully!" });
     })
     .catch((err) => {
-      console.error(err);
       res.status(500).send({
         message: "Error deleting note with id: " + req.params.noteId,
       });

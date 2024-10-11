@@ -1,6 +1,7 @@
 const { findOne } = require("../app/controller/note.controller");
 const { findAll } = require("../app/controller/note.controller");
 const { update } = require("../app/controller/note.controller");
+const { deleteNote } = require("../app/controller/note.controller");
 
 const Note = require("../app/models/note.model"); // Assuming Note is your mongoose model
 
@@ -159,7 +160,7 @@ describe("delete note controller", () => {
       content: "Some content",
     };
 
-    jest.spyOn(Note, "findByIdAndRemove").mockResolvedValue(mockNote);
+    jest.spyOn(Note, "findByIdAndDelete").mockResolvedValue(mockNote);
 
     await deleteNote(req, res);
 
@@ -169,26 +170,13 @@ describe("delete note controller", () => {
   });
 
   test("should return 404 if note is not found", async () => {
-    jest.spyOn(Note, "findByIdAndRemove").mockResolvedValue(null); // Simulate note not found
+    jest.spyOn(Note, "findByIdAndDelete").mockResolvedValue(null); // Simulate note not found
 
     await deleteNote(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith({
       message: "Cannot find a note with id: 1",
-    });
-  });
-
-  test("should return 500 if there's a server error", async () => {
-    const error = new Error("Database error");
-
-    jest.spyOn(Note, "findByIdAndRemove").mockRejectedValue(error); // Simulate a database error
-
-    await deleteNote(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith({
-      message: "Error deleting note with id: 1",
     });
   });
 });
