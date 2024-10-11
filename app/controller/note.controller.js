@@ -6,17 +6,24 @@ exports.create = (req, res) => {
       message: "Note content can not be empty",
     });
   }
+
   const note = new Note({
     title: req.body.title || "Untitled note",
     content: req.body.content,
   });
+
   note
     .save()
     .then((data) => {
       res.send(data);
     })
-    .catch(console.error());
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while creating the Note.",
+      });
+    });
 };
+
 exports.findAll = (req, res) => {
   Note.find()
     .then((notes) => {
