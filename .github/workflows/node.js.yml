@@ -42,7 +42,7 @@ jobs:
       - name: Build the Docker Image
         run: docker build -t vutientrinh0410/notes:latest .
       - name: Docker Push
-        run: docker push vutientrinh0410/notes:latest .
+        run: docker push vutientrinh0410/notes:latest
       # - name: "Logout from Docker Hub"
       #   run: docker logout
       # - name: "Login to Docker Hub"
