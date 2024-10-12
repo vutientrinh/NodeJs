@@ -73,7 +73,11 @@ exports.update = (req, res) => {
       }
       res.send(note);
     })
-    .catch(console.error());
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error update note with id: " + req.params.noteId,
+      });
+    });
 };
 
 exports.deleteNote = (req, res) => {
