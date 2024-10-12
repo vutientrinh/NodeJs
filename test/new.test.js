@@ -176,7 +176,7 @@ describe("delete note controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith({
-      message: "Cannot find a note with id: 1",
+      message: "Cannot find a note with 1",
     });
   });
 });
