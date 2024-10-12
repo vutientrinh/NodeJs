@@ -40,7 +40,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker Image
-        run: docker build -t NodeJs
+        run: docker build -t NodeJs .
       - name: Docker Push
         run: docker push vutientrinh0410/nodejs:latest
       # - name: "Logout from Docker Hub"
