@@ -5,7 +5,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/node
+      - PORT=3000
+      - MONGO_URL=mongodb://mongo:27017
+      - DB_NAME=node
     depends_on:
       - mongo
 
