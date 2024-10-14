@@ -4,15 +4,15 @@
 name: Run CI/CD
 
 on:
-  push:
-    # paths:
-    #   - "!README.md"
-    #   - "**.js"
-    branches:
-      - "main"
+  # push:
+  #   # paths:
+  #   #   - "!README.md"
+  #   #   - "**.js"
+  #   branches:
+  #     - "main"
 
-  pull_request:
-    branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
 
   workflow_dispatch:
     inputs:
