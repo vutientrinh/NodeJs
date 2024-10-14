@@ -6,6 +6,7 @@ name: Run CI/CD
 on:
   push:
     branches: ["main"]
+    paths: ["!README.md"]
   pull_request:
     branches: ["main"]
 
@@ -28,14 +29,14 @@ jobs:
       - run: npm ci
       - run: npm test
 
-      - uses: actions/checkout@v4
-      - name: Login to DockerHub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      # - uses: actions/checkout@v4
+      # - name: Login to DockerHub
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #   run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Build the Docker Image
-        run: docker build -t vutientrinh0410/notes:latest .
-      - name: Docker Push
-        run: docker push vutientrinh0410/notes:latest
+      # - name: Build the Docker Image
+      #   run: docker build -t vutientrinh0410/notes:latest .
+      # - name: Docker Push
+      #   run: docker push vutientrinh0410/notes:latest
