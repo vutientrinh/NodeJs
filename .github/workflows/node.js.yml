@@ -8,7 +8,7 @@ on:
     branches: ["main"]
     paths: ["!README.md"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "testci"]
 
 jobs:
   build:
