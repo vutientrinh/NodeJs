@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.json({
-    message: "Hello",
+    message: "Hello Vu Tien Trinh",
   });
 });
 require("./app/routers/note.routers.js")(app);
