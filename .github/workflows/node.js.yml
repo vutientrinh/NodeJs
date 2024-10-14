@@ -5,9 +5,9 @@ name: Run CI/CD
 
 on:
   push:
-    paths:
-      - "!README.md"
-      - "**.js"
+    # paths:
+    #   - "!README.md"
+    #   - "**.js"
     branches:
       - "main"
 
