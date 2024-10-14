@@ -13,6 +13,16 @@ on:
 
   pull_request:
     branches: ["main"]
+
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name to greet"
+        required: true
+        default: "World"
+
+  # schedule:
+  #   - cron: '0 0 * * *'  # Every day at midnight
 jobs:
   buiding:
     runs-on: ubuntu-latest
