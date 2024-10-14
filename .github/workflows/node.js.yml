@@ -6,16 +6,17 @@ name: Run CI/CD
 on:
   push:
     branches: ["main"]
+    paths: ["!README.md"]
   pull_request:
     branches: ["main"]
 
 jobs:
-  build:
+  buiding:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -28,14 +29,14 @@ jobs:
       - run: npm ci
       - run: npm test
 
-      - uses: actions/checkout@v4
-      - name: Login to DockerHub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      # - uses: actions/checkout@v4
+      # - name: Login to DockerHub
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #   run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Build the Docker Image
-        run: docker build -t vutientrinh0410/notes:latest .
-      - name: Docker Push
-        run: docker push vutientrinh0410/notes:latest
+      # - name: Build the Docker Image
+      #   run: docker build -t vutientrinh0410/notes:latest .
+      # - name: Docker Push
+      #   run: docker push vutientrinh0410/notes:latest
