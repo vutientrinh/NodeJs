@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
 
@@ -18,7 +19,6 @@ app.listen(3000, () => {
 // Configuring the database
 const dbConfig = require("./config/database.config.js");
 console.log("MONGO_URL:", process.env.MONGO_URL);
-console.log("DB_NAME:", process.env.DB_NAME);
 
 // const dbConfig = process.env.MONGO_URL || "mongodb://localhost:27017/node";
 
