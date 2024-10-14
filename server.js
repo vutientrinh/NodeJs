@@ -17,10 +17,10 @@ app.listen(3000, () => {
 });
 
 // Configuring the database
-const dbConfig = require("./config/database.config.js");
+// const dbConfig = require("./config/database.config.js");
 console.log("MONGO_URL:", process.env.MONGO_URL);
 
-// const dbConfig = process.env.MONGO_URL || "mongodb://localhost:27017/node";
+const dbConfig = "mongodb://localhost:27017/node";
 
 const mongoose = require("mongoose");
 
@@ -28,7 +28,7 @@ mongoose.Promise = global.Promise;
 
 // Connecting to the database
 mongoose
-  .connect(dbConfig.url, {
+  .connect(dbConfig, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
