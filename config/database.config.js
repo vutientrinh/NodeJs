@@ -1,6 +1,7 @@
+require("dotenv").config();
 module.exports = {
   url: "mongodb://localhost:27017/node",
-  //   url: process.env.MONGO_URL
+  // url: process.env.MONGO_URL,
 };
 
 // module.exports = {
