@@ -5,9 +5,11 @@ name: Run CI/CD
 
 on:
   push:
-    branches: ["main"]
     paths:
       - "!README.md"
+    branches:
+      - "main"
+
   pull_request:
     branches: ["main"]
 
