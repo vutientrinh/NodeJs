@@ -1,4 +1,4 @@
-name: Run CI/CD
+name: CI/CD basic
 
 on:
   push:
