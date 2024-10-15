@@ -1,22 +1,22 @@
 name: CI/CD basic
 
 on:
-  push:
-    # paths:
-    #   - "!README.md"
-    #   - "**.js"
-    branches:
-      - "main"
+  # push:
+  #   # paths:
+  #   #   - "!README.md"
+  #   #   - "**.js"
+  #   branches:
+  #     - "main"
 
-  pull_request:
-    branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
 
-  # workflow_dispatch:
-  #   inputs:
-  #     name:
-  #       description: "Name to greet"
-  #       required: true
-  #       default: "World"
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name to greet"
+        required: true
+        default: "World"
 
   # schedule:
   #   - cron: '0 0 * * *'  # Every day at midnight
