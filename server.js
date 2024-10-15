@@ -20,7 +20,7 @@ app.listen(3000, () => {
 // const dbConfig = require("./config/database.config.js");
 console.log("MONGO_URL:", process.env.MONGO_URL);
 
-const dbConfig = "mongodb://localhost:27017/node";
+const dbConfig = "mongodb://mongo_db:27017/node";
 
 const mongoose = require("mongoose");
 
